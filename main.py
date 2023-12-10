@@ -1,5 +1,5 @@
 import sys
-from lib import dtaManipulation, dataReader, utils
+from lib import dataManipulation, dataReader, utils
 from pyspark.sql.functions import *
 
 if __name__ == '__main__':
