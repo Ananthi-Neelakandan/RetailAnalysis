@@ -6,6 +6,7 @@ if __name__ == '__main__':
     if len(sys.argv) < 2:
         print("Please specify the environment")
         sys.exit(-1)
+# testing ADF
 job_run_env = sys.argv[1]
 print("Creating Spark Session")
 spark = utils.get_spark_session(job_run_env)
