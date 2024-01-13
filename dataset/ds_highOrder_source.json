@@ -1,0 +1,27 @@
+{
+	"name": "ds_highOrder_source",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_highOrder_service",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "output_dataset"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "output/high_order_report",
+				"fileSystem": "requirement5"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

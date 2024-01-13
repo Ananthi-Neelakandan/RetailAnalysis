@@ -1,0 +1,33 @@
+{
+	"name": "retailadf001",
+	"properties": {
+		"globalParameters": {
+			"baseURL": {
+				"type": "string",
+				"value": "https://blobstorageretail.blob.core.windows.net"
+			},
+			"relativeURLcategories": {
+				"type": "string",
+				"value": "blob-container/categories.csv"
+			},
+			"relativeURLcustomers": {
+				"type": "string",
+				"value": "blob-container/customers.csv"
+			},
+			"customersFileName": {
+				"type": "string",
+				"value": "customers.csv"
+			},
+			"categoriesFileName": {
+				"type": "string",
+				"value": "categories.csv"
+			}
+		}
+	},
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "d80308a7-f055-4d03-8df6-b666b16a0781",
+		"tenantId": "9bc6dc60-4a8b-477b-affc-c0e958bfbfa9"
+	}
+}

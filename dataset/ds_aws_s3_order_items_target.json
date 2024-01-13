@@ -1,0 +1,52 @@
+{
+	"name": "ds_aws_s3_order_items_target",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_AmazonS31",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "order_items_dataset"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AmazonS3Location",
+				"bucketName": "s3-bucket123",
+				"fileName": "order_items.csv"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "order_item_id",
+				"type": "String"
+			},
+			{
+				"name": "order_item_order_id",
+				"type": "String"
+			},
+			{
+				"name": "order_item_product_id",
+				"type": "String"
+			},
+			{
+				"name": "order_item_quantity",
+				"type": "String"
+			},
+			{
+				"name": "order_item_subtotal",
+				"type": "String"
+			},
+			{
+				"name": "order_item_product_price",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

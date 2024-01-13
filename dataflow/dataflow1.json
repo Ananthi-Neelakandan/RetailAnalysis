@@ -1,0 +1,124 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_adlsgen000",
+						"type": "DatasetReference"
+					},
+					"name": "orderItemsSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_adlsgen000_orders_target",
+						"type": "DatasetReference"
+					},
+					"name": "orderSource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_highOrder_source",
+						"type": "DatasetReference"
+					},
+					"name": "highOrderTarget"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_lowOrder_source",
+						"type": "DatasetReference"
+					},
+					"name": "lowOrderValuesReport"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_errorneous_source",
+						"type": "DatasetReference"
+					},
+					"name": "errorenousReport"
+				}
+			],
+			"transformations": [
+				{
+					"name": "orderAmountSegregate"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "selectCertainColumns"
+				},
+				{
+					"name": "split1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          order_item_id as short,",
+				"          order_item_order_id as short,",
+				"          order_item_product_id as integer,",
+				"          order_item_quantity as integer,",
+				"          order_item_subtotal as double,",
+				"          order_item_product_price as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> orderItemsSource",
+				"source(output(",
+				"          order_id as short,",
+				"          order_date as string,",
+				"          customer_id as short,",
+				"          order_status as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> orderSource",
+				"orderItemsSource aggregate(groupBy(order_item_order_id),",
+				"     order_item_subtotal = sum(order_item_subtotal)) ~> orderAmountSegregate",
+				"orderAmountSegregate, orderSource join(order_item_order_id == order_id,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 select(mapColumn(",
+				"          order_id,",
+				"          order_date,",
+				"          customer_id,",
+				"          order_item_subtotal",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectCertainColumns",
+				"selectCertainColumns split(order_item_subtotal>500,",
+				"     order_item_subtotal<=500,",
+				"     disjoint: false,",
+				"     partitionBy('hash', 1)) ~> split1@(highOrderValuesReport, lowOrderValuesReport, errenousReport)",
+				"split1@highOrderValuesReport sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> highOrderTarget",
+				"split1@lowOrderValuesReport sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> lowOrderValuesReport",
+				"split1@errenousReport sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> errorenousReport"
+			]
+		}
+	}
+}

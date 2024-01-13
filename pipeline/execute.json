@@ -1,0 +1,63 @@
+{
+	"name": "execute",
+	"properties": {
+		"activities": [
+			{
+				"name": "order ingest data",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_blob_adls",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "order_item ingest data",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "order ingest data",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_s3_adls",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "process",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "order_item ingest data",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_process",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-12-22T19:19:13Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

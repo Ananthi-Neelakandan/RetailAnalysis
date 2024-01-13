@@ -1,0 +1,25 @@
+{
+	"name": "ADF_trigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "execute",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/orders/blobs/orders/",
+			"blobPathEndsWith": "orders.csv",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/b0496f61-a777-435c-a595-570c2255b047/resourceGroups/rg002/providers/Microsoft.Storage/storageAccounts/blobstorageretail",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}

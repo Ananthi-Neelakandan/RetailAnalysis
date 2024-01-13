@@ -1,0 +1,27 @@
+{
+	"name": "ds_blob_orders_source",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_orders_blob",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "orders_dataset"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "orders.csv",
+				"container": "orders"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
